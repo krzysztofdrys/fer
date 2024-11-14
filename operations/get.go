@@ -9,8 +9,8 @@ import (
 
 type GetConfig struct {
 	GitCache       string
-	MainBranch     string
-	Repository     string
+	DefaultBranch  string
+	RepositoryURL  string
 	Directory      string
 	CheckoutBranch string
 	AuthorEmail    string
@@ -20,10 +20,10 @@ func Get(cfg GetConfig) (string, error) {
 	err := git.EnsureFreshRepo(
 		cfg.GitCache,
 		cfg.Directory,
-		cfg.Repository,
-		cfg.MainBranch)
+		cfg.RepositoryURL,
+		cfg.DefaultBranch)
 	if err != nil {
-		return "", fmt.Errorf("failed to reset repository to fresh %q branch: %w", cfg.MainBranch, err)
+		return "", fmt.Errorf("failed to reset repository to fresh %q branch: %w", cfg.DefaultBranch, err)
 	}
 
 	p := filepath.Join(cfg.GitCache, cfg.Directory)

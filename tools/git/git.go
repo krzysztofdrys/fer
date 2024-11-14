@@ -65,7 +65,7 @@ func EnsureGitAuthor(p, email string) error {
 	return nil
 }
 
-func PushChanges(p, branch string) error {
+func PushForceChanges(p, branch string) error {
 	if err := git.
 		WithArgs("push", "--force-with-lease", "origin", branch).
 		InDirectory(p).
@@ -111,5 +111,15 @@ func reset(p, branch string) error {
 	if err != nil {
 		return fmt.Errorf("failed pull newest changes to branch %q: %w", branch, err)
 	}
+
+	err = call.
+		Command("git").
+		WithArgs("clean", "-f", "-d").
+		InDirectory(p).
+		SimpleRun()
+	if err != nil {
+		return fmt.Errorf("failed to clean the directory: %w", err)
+	}
+
 	return nil
 }
